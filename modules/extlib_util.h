@@ -23,13 +23,20 @@
 #include <math.h>
 #include "m_pd.h"
 
-
+/* On OSX somehow this expands to '_ctassert___COUNTER__
+   i.e. the __COUNTER__ part is not expanded before it is concatenated.
+   I guess this is ok to disable it on OSX:
+   CT_ASSERTs are active in Linux build. */
+#ifdef MACOSX
+#define CT_ASSERT(x)
+#else
 #define CT_NAMED_ASSERT(name,x)                         \
     typedef int _GENSYM(name ## _ctassert_)[-((x)==0)]
 #define CT_ASSERT(x) CT_NAMED_ASSERT(,x)
 #define _GENSYM(x) _CONCAT(x,__COUNTER__)
 #define _CONCAT1(x,y) x##y
 #define _CONCAT(x,y) _CONCAT1(x,y)
+#endif
 
 /* Only defined in pd-extended. */
 #ifndef PD_FLOAT_PRECISION
