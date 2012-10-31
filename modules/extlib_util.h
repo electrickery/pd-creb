@@ -23,11 +23,13 @@
 #include <math.h>
 #include "m_pd.h"
 
-/* On OSX somehow this expands to '_ctassert___COUNTER__
-   i.e. the __COUNTER__ part is not expanded before it is concatenated.
-   I guess this is ok to disable it on OSX:
-   CT_ASSERTs are active in Linux build. */
-#ifdef MACOSX
+/* Compile-time asserts. */
+/* On OSX it seems that _GENSYM(_ctassert_) expands to
+   '_ctassert___COUNTER__ i.e. the __COUNTER__ built-in symbol is not
+   expanded before it is concatenated.  As a workaround it is disabled
+   on OSX.  This seems OK since CT_ASSERTs serve their purpose in the
+   Linux build. */
+#ifdef __APPLE__
 #define CT_ASSERT(x)
 #else
 #define CT_NAMED_ASSERT(name,x)                         \
