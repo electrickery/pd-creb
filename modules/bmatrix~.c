@@ -25,6 +25,13 @@
 #include <stdlib.h>
 #include <string.h>  
 
+/* support older Pd versions without sys_open(), sys_fopen(), sys_fclose() */
+#if PD_MAJOR_VERSION == 0 && PD_MINOR_VERSION < 44
+#define sys_open open
+#define sys_fopen fopen
+#define sys_fclose fclose
+#endif
+
 #define MAXORDER 1024
 
 typedef struct matrixctl
