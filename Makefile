@@ -2,6 +2,9 @@
 # Makefile for pure data externals in lib creb.
 # Needs Makefile.pdlibbuilder to work (https://github.com/pure-data/pd-lib-builder)
 
+# per default, build a multi-object library
+make-lib-executable=no
+
 lib.name = creb
 
 # special file that does not provide a class
@@ -19,8 +22,12 @@ COPYING \
 README \
 TODO
 
+#datadirs = \
+#doc/examples
+
+
 # pass current version (from creb-meta.pd) to the compiler
-cflags = -DCREB_VERSION=\"$(shell $(SHELL) bin/version)\"
+#cflags = -DCREB_VERSION=\"$(shell $(SHELL) bin/version)\"
 
 # default target 'all'
 all:
@@ -40,12 +47,6 @@ include $(firstword $(wildcard Makefile.pdlibbuilder ../Makefile.pdlibbuilder))
 ################################################################################
 ### creb extra targets #########################################################
 ################################################################################
-
-
-.PHONY: bootstrap
-bootstrap:
-	-chmod +x bin/*
-
 
 # install files with idiosyncratic source/destination paths
 
