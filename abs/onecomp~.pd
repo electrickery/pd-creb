@@ -1,0 +1,9 @@
+#N canvas 527 369 294 159 10;
+#X obj 53 26 inlet~;
+#X obj 53 53 *~ -1;
+#X obj 53 78 +~ 1;
+#X obj 53 104 outlet~;
+#X text 155 23 one compliment;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
