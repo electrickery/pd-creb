@@ -11,6 +11,7 @@ current: ead~.o ear~.o eadsr~.o dist~.o \
 	dwt.o cmath.o \
 	sawtooth~.o \
 	\
+	dt_ms.o \
 	setup.o
 
 
