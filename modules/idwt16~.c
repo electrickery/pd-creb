@@ -95,7 +95,7 @@ static void idwt16_dsp(t_dwt *x, t_signal **sp)
     int n = sp[0]->s_n;
     int ln = 0;
 
-    idwt_permutation(x, n);
+    dwt_permutation(x, n);
 
     x->x_ctl.c_mask = n-1;
     while (n >>= 1) 

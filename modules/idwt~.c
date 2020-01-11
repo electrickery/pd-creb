@@ -95,7 +95,7 @@ static void idwt_dsp(t_dwt *x, t_signal **sp)
     int n = sp[0]->s_n;
     int ln = 0;
 
-    idwt_permutation(x, n);
+    dwt_permutation(x, n);
 
     x->x_ctl.c_mask = n-1;
     while (n >>= 1) 
@@ -107,7 +107,7 @@ static void idwt_dsp(t_dwt *x, t_signal **sp)
 
 static void *idwt_new(t_floatarg permute)
 {
-    t_dwt *x = (t_dwt *)pd_new(dwt_class);
+    t_dwt *x = (t_dwt *)pd_new(idwt_class);
     int i;
 
     outlet_new(&x->x_obj, gensym("signal")); 
