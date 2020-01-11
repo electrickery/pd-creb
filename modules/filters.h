@@ -162,6 +162,7 @@ P two_pole_complex_conj (T X, T Y, T S, T A, T C)
 
 /* evaluate pole and allzero TF in z^-1 given the complex zeros/poles:
    p(z) (or p(z)^-1) = \product (1-z_i z^-1) */
+#if 0
 PP eval_zero_poly(t_float *val, t_float *arg, t_float *zeros, int nb_zeros)
 {
     int i;
@@ -178,17 +179,21 @@ PP eval_zero_poly(t_float *val, t_float *arg, t_float *zeros, int nb_zeros)
 	vcmul2(val, t);
     }
 }
+#endif
 
+#if 0
 PP eval_pole_poly(t_float *val, t_float *arg, t_float *poles, int nb_poles)
 {
     eval_zero_poly(val, arg, poles, nb_poles);
     vcinv1(val);
 }
+#endif
 
 
 /* since it's more efficient to store half of the poles for a real impulse
    response, these functions compute p(z) conj(p(conj(z)))  */
 
+#if 0
 PP eval_conj_zero_poly(t_float *val, t_float *arg, t_float *zeros, int nb_zeros)
 {
     t_float t[2];
@@ -199,20 +204,24 @@ PP eval_conj_zero_poly(t_float *val, t_float *arg, t_float *zeros, int nb_zeros)
     val[1] *= -1;
     vcmul2(val, t);
 }
-
+#endif
+#if 0
 PP eval_conj_pole_poly(t_float *val, t_float *arg, t_float *poles, int nb_poles)
 {
     eval_conj_zero_poly(val, arg, poles, nb_poles);
     vcinv1(val);
 }
+#endif
 
-PP eval_conj_pole_zero_ratfunc(t_float *val, t_float *arg, t_float *poles, t_float *zeros, int nb_poles, int nb_zeros)
+#if 0
+PP eval_conj_pole_zero_ratfunc(t_float *val, t_float *arg, t_float *poles, t_float *zeros, int nb_poles  __attribute__((__unused__)), int nb_zeros)
 {
     t_float t[2];
     eval_conj_zero_poly(t, arg, zeros, nb_zeros);
     eval_conj_pole_poly(val, arg, poles, nb_zeros);
     vcmul2(val, t);
 }
+#endif
 
 
 

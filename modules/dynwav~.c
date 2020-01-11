@@ -43,6 +43,7 @@ typedef struct dynwav
 } t_dynwav;
 
 
+#if 0
 static t_int *dynwav_perform(t_int *w)
 {
 
@@ -107,6 +108,7 @@ static t_int *dynwav_perform(t_int *w)
     }
   return (w+6);
 }
+#endif
 
 static t_int *dynwav_perform_8point(t_int *w) 
 /* FIXME: i thought this was broken. */
