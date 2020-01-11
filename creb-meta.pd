@@ -1,0 +1,5 @@
+#N canvas 48 350 450 300 10;
+#X text 9 18 AUTHOR Tom Schouten <tom@zwizwa.be>;
+#X text 9 42 DESCRIPTION This is a collection of pd externals. My bag of tricks.;
+#X text 9 79 LICENSE GNU GPL 2;
+#X text 9 105 VERSION 0.9.2darcs;

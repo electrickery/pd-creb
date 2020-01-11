@@ -1,40 +1,64 @@
-include Makefile.config
+#!/usr/bin/make -f
+# Makefile for pure data externals in lib creb.
+# Needs Makefile.pdlibbuilder to work (https://github.com/pure-data/pd-lib-builder)
 
-all: 
-	make -C modules
-	make -C modules++
+lib.name = creb
 
-	rm -f $(LIBNAME)
-	$(CXX) $(LIBFLAGS) -o $(LIBNAME) modules/*.o modules++/*.o -lm
+# special file that does not provide a class
+lib.setup.sources = modules/setup.c
 
-clean:
-	make -C modules clean
-	make -C modules++ clean
-	rm -f $(LIBNAME)
-	rm -f *~
+# all other C and C++ files in subdirs are source files per class
+# (alternatively, enumerate them by hand)
+class.sources = $(filter-out $(lib.setup.sources),$(wildcard modules/*.c modules++/*.cc))
 
-tags:
-	etags --language=auto */*.c */*.h */*.cpp
+datafiles = \
+$(wildcard doc/*-help.pd abs/*.pd) \
+creb-meta.pd \
+CHANGES.LOG \
+COPYING \
+README \
+TODO
 
-tagsclean:
-	rm -f TAGS
+datadirs = doc/examples/
 
-install:
-	test -d $(prefix)/lib/pd
-	install -d $(prefix)/lib/pd/extra
-	install -m 755 $(LIBNAME) $(prefix)/lib/pd/extra
-	install -m 644 abs/*.pd $(prefix)/lib/pd/extra
-	install -m 644 doc/*.pd $(prefix)/lib/pd/doc/5.reference
-	install -d $(prefix)/lib/pd/doc/creb
-	install -m 644 doc/examples/*.pd $(prefix)/lib/pd/doc/creb
+# per default, build a multi-object library
+make-lib-executable=yes
+
+# pass current version (from creb-meta.pd) to the compiler
+cflags = -DCREB_VERSION=\"$(shell $(SHELL) bin/version)\"
+
+# default target 'all'
+all:
+pre: bootstrap
+
+################################################################################
+### pdlibbuilder ###############################################################
+################################################################################
 
 
+# Include Makefile.pdlibbuilder from this directory, or else from externals
+# root directory in pd-extended configuration.
+
+include $(firstword $(wildcard Makefile.pdlibbuilder ../Makefile.pdlibbuilder))
+
+
+################################################################################
+### creb extra targets #########################################################
+################################################################################
+
+
+.PHONY: bootstrap
 bootstrap:
-	. bootstrap
+	-chmod +x bin/*
 
-# snapshot after release
-snapshot: bootstrap
-	bin/dist-snapshot -d
 
-# to make a release, increment the version number in darcs and run
-# 	bin/dist-snapshot
+# install files with idiosyncratic source/destination paths
+
+install: install-creb-extras
+
+install-creb-extras: all
+	$(INSTALL_DIR) $(installpath)/manual && \
+        $(INSTALL_DATA) doc/reference.txt $(installpath)/manual
+	$(INSTALL_DIR) $(installpath)/examples && \
+        $(INSTALL_DATA) $(wildcard doc/examples/*.pd) $(installpath)/examples
+
