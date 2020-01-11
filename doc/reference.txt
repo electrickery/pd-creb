@@ -45,7 +45,6 @@ ratio		multiply by 2^k so result is 1<=r<2 (transposer)
 
 tilde externs
 
-abs~		absolute value
 bdiag~		block diagonal state space system (spectral processor)
 bfft~		reordered fft
 bitsplit~	convert signal to binary vector

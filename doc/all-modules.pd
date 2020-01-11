@@ -3,7 +3,7 @@
 #X obj 10 30 creb/ffpoly;
 #X obj 10 55 creb/fwarp;
 #X obj 10 80 creb/ratio;
-#X obj 10 130 creb/abs~;
+
 #X obj 10 155 creb/bdiag~;
 #X obj 10 180 creb/bfft~;
 #X obj 10 205 creb/bitsplit~;
