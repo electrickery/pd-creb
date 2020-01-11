@@ -19,11 +19,6 @@ COPYING \
 README \
 TODO
 
-datadirs = doc/examples/
-
-# per default, build a multi-object library
-make-lib-executable=yes
-
 # pass current version (from creb-meta.pd) to the compiler
 cflags = -DCREB_VERSION=\"$(shell $(SHELL) bin/version)\"
 
