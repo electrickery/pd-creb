@@ -1,5 +1,5 @@
 /*
- *   dwt.c  - code for discrete wavelet transform 
+ *   dwt16.c  - code for discrete wavelet transform 
  *   (symmetric interpolating biorthogonal wavelets using the lifting transform) 
  *   Copyright (c) 2000-2003 by Tom Schouten
  *
@@ -18,6 +18,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+
 #include "m_pd.h"
 #include <math.h>
 #include <stdio.h>
@@ -28,9 +29,9 @@
 
 #define MAXORDER 64
 
-t_class *dwt_class;
+t_class *dwt16_class;
 
-static t_int *dwt_perform(t_int *w)
+static t_int *dwt16_perform(t_int *w)
 {
   t_float *in     = (t_float *)(w[3]);
   t_float *out    = (t_float *)(w[4]);
@@ -53,7 +54,8 @@ static t_int *dwt_perform(t_int *w)
 
   /* copy input to output */
   if (in != out)
-    for (i=0; i<n; i++) out[i]=in[i];
+    for (i=0; i<n; i++) 
+        out[i]=in[i];
 
   /* fake input */
   /*    for (i=0; i<n; i++) out[i]=0; out[n/8]=1;*/
@@ -63,11 +65,12 @@ static t_int *dwt_perform(t_int *w)
   /* iterate over all levels */
   for (i=0; i < ctl->c_levels; i++){
 
+
     /* foreward predict */
-    dwtloop(out, (source_p & (n-1)), dest, increment, backup_p, numcoef, n-1, ctl->c_predict, ctl->c_npredict, -1);
+    dwtloop16(out, (source_p & (n-1)), dest, increment, backup_p, numcoef, n-1, ctl->c_predict, 16, -1);
 
     /* foreward update */
-    dwtloop(out, (source_u & (n-1)), 0,    increment, backup_u, numcoef, n-1, ctl->c_update,  ctl->c_nupdate,  +1);
+    dwtloop16(out, (source_u & (n-1)), 0,    increment, backup_u, numcoef, n-1, ctl->c_update,  16,  +1);
 
     /* update control parameters */
     numcoef /= 2;
@@ -81,10 +84,11 @@ static t_int *dwt_perform(t_int *w)
   
   if (ctl->c_permute) 
     dwt_perform_permutation(out, n, ctl->c_unclutter);
+
   return (w+5);
 }
 
-static void dwt_dsp(t_dwt *x, t_signal **sp)
+static void dwt16_dsp(t_dwt *x, t_signal **sp)
 {
     int n = sp[0]->s_n;
     int ln = 0;
@@ -96,12 +100,13 @@ static void dwt_dsp(t_dwt *x, t_signal **sp)
         ln++;     
     x->x_ctl.c_levels = ln;
 
-    dsp_add(dwt_perform, 4, &x->x_ctl, sp[0]->s_n, sp[0]->s_vec, sp[1]->s_vec);
+    dsp_add(dwt16_perform, 4, &x->x_ctl, sp[0]->s_n, sp[0]->s_vec, sp[1]->s_vec);
 }
 
-static void *dwt_new(t_floatarg permute)
+static void *dwt16_new(t_floatarg permute)
 {
-    t_dwt *x = (t_dwt *)pd_new(dwt_class);
+    t_dwt *x = (t_dwt *)pd_new(dwt16_class);
+    int i;
 
     outlet_new(&x->x_obj, gensym("signal")); 
 
@@ -111,29 +116,22 @@ static void *dwt_new(t_floatarg permute)
     x->x_ctl.c_clutter = NULL;
     x->x_ctl.c_unclutter = NULL;
     x->x_ctl.c_permute = (t_int) permute;
-    
-    sprintf(x->x_ctl.c_name,"dwt");
-    x->x_ctl.c_type = DWT;
+    sprintf(x->x_ctl.c_name,"dwt16");
     return (void *)x;
 }
 
-void dwt_tilde_setup(void)
+void dwt16_tilde_setup(void)
 {
-   //post("dwt~ v0.1");
+  //post("dwt16~ v0.1");
 
-    dwt_class = class_new(gensym("dwt~"), (t_newmethod)dwt_new,
-        (t_method)dwt_free, sizeof(t_dwt), 0, A_DEFFLOAT, 0);
-    CLASS_MAINSIGNALIN(dwt_class, t_dwt, x_f);
-    class_addmethod(dwt_class, (t_method)dwt_print, gensym("print"), 0);
-    class_addmethod(dwt_class, (t_method)dwt_reset, gensym("reset"), 0);
-    class_addmethod(dwt_class, (t_method)dwt_dsp,   gensym("dsp"),   0); 
+    dwt16_class = class_new(gensym("dwt16~"), (t_newmethod)dwt16_new,
+    	(t_method)dwt_free, sizeof(t_dwt), 0, A_DEFFLOAT, 0);
+    CLASS_MAINSIGNALIN(dwt16_class, t_dwt, x_f);
+    class_addmethod(dwt16_class, (t_method)dwt_print, gensym("print"), 0);
+    class_addmethod(dwt16_class, (t_method)dwt_reset, gensym("reset"), 0);
+    class_addmethod(dwt16_class, (t_method)dwt16_dsp, gensym("dsp"),   0); 
 
-    class_addmethod(dwt_class, (t_method)dwt_filter, gensym("predict"), A_GIMME, 0); 
-    class_addmethod(dwt_class, (t_method)dwt_filter, gensym("update"),  A_GIMME, 0); 
-    class_addmethod(dwt_class, (t_method)dwt_filter, gensym("mask"),    A_GIMME, 0);
-
-    class_addmethod(dwt_class, (t_method)dwt_even, gensym("even"),      A_DEFFLOAT, 0);
-
-    /*class_addmethod(dwt_class, (t_method)dwt_wavelet, gensym("wavelet"), A_DEFFLOAT, 0); */
+    class_addmethod(dwt16_class, (t_method)dwt_filter, gensym("predict"), A_GIMME, 0); 
+    class_addmethod(dwt16_class, (t_method)dwt_filter, gensym("update"),  A_GIMME, 0); 
+    class_addmethod(dwt16_class, (t_method)dwt_filter, gensym("mask"),    A_GIMME, 0);
 }
-
