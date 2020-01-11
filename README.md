@@ -4,4 +4,13 @@ This repository will be a merge of Tom Schouten's darcs version from http://zwiz
 
 To reflect the changes, the version number will be changed to 0.9.3.
 
+Compilation (Linux MacOSX) example:
+<pre>make PDDIR=../pure-data/</pre>
+
+Compilation (Windows MinGW2)) example:
+<pre>make PDDIR=../pure-data/ PDBINDIR=../pdbin64/</pre>
+
+Installation example:
+<pre>make PDDIR=../pure-data/ install pkglibdir=~/Documents/Pd/externals/</pre>
+
 Fred Jan Kraan, fjkraan@xs4all.nl, 2010-01-11
