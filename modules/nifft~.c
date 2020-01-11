@@ -1,5 +1,5 @@
 /*
- *   clog.c  - some complex math dsp objects
+ *   nifft.c  - some complex math dsp objects
  *   Copyright (c) 2000-2003 by Tom Schouten
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -22,61 +22,61 @@
 
 #define MINNORM 0.0000000001
 
-t_class *clog_class;
+t_class *nifft_class;
 
-typedef struct clog
+typedef struct nifft
 {
     t_object x_obj;
     t_float x_f;
-} t_clog;
+} t_nifft;
 
-void clog_free(void)
+void nifft_free(void)
 {
 }
 
-static t_int *clog_perform(t_int *w)
+static t_int *nifft_perform(t_int *w)
 {
     t_float *inx    = (t_float *)(w[2]);
     t_float *iny    = (t_float *)(w[3]);
-    t_float *outx   = (t_float *)(w[5]); // clockwize addressing
-    t_float *outy   = (t_float *)(w[4]);
-    t_int n         = (t_int)(w[1]);
+    t_float *outx    = (t_float *)(w[5]); // clockwize addressing
+    t_float *outy    = (t_float *)(w[4]);
+    t_int i;
+    t_int n = (t_int)(w[1]);
+    t_float x;
+    t_float scale = 1.0 / (sqrt((t_float)n));
 
-    while (n--) {
+    mayer_fft(n, inx, outx);
+
+    while (n--){
         t_float x = *inx++;
         t_float y = *iny++;
-        t_float norm = sqrt(x*x + y*y);
-        t_float arg = atan2(y, x);
-        if (norm < MINNORM) {
-            norm = MINNORM;
-        }
-        *outx++ = log(norm);
-        *outy++ = arg;
+        *outx++ = scale * x;
+        *outy++ = scale * y;
     }
     return (w+6);
 }
 
-static void clog_dsp(t_clog *x, t_signal **sp)
+static void nifft_dsp(t_nifft *x, t_signal **sp)
 {
-    dsp_add(clog_perform, 5, sp[0]->s_n, sp[0]->s_vec, sp[1]->s_vec, 
+    dsp_add(nifft_perform, 5, sp[0]->s_n, sp[0]->s_vec, sp[1]->s_vec, 
         sp[2]->s_vec, sp[3]->s_vec);
 }
 
-t_clog *clog_new(void)
+t_nifft *nifft_new(void)
 {
-    t_clog *x = (t_clog *)pd_new(clog_class);
+    t_nifft *x = (t_nifft *)pd_new(nifft_class);
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("signal"), gensym("signal"));  
     outlet_new(&x->x_obj, gensym("signal")); 
     outlet_new(&x->x_obj, gensym("signal")); 
     return x;
 }
 
-void clog_tilde_setup(void)
+void nifft_tilde_setup(void)
 {
-    clog_class = class_new(gensym("clog~"), (t_newmethod)clog_new,
-        (t_method)clog_free, sizeof(t_clog), 0, 0);
+    nifft_class = class_new(gensym("nifft~"), (t_newmethod)nifft_new,
+        (t_method)nifft_free, sizeof(t_nifft), 0, 0);
 
-    CLASS_MAINSIGNALIN(clog_class, t_clog, x_f);
+    CLASS_MAINSIGNALIN(nifft_class, t_nifft, x_f);
 
-    class_addmethod(clog_class, (t_method)clog_dsp, gensym("dsp"), 0); 
+    class_addmethod(nifft_class, (t_method)nifft_dsp, gensym("dsp"), 0); 
 }
