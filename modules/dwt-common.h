@@ -21,6 +21,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef DWTCOMMON
 
 #include "m_pd.h"
 #include <math.h>
@@ -200,8 +201,6 @@ static void dwt_permutation(t_dwt *x, t_int n){
   exit(1);
 }
 
-
-
 static void idwt_coef(t_dwt *x, t_floatarg index, t_floatarg value)
 {
   x->x_ctl.c_fakein = (int)index;
@@ -291,12 +290,8 @@ static void dwt_filter(t_dwt *x,  t_symbol *s, int argc, t_atom *argv)
 	      x->x_ctl.c_nupdate = argc;
 	    }
 	}
-
     }
-
 }
-
-
 
 static inline void dwtloop(t_float *vector, 
 			   int source,
@@ -309,8 +304,7 @@ static inline void dwtloop(t_float *vector,
 		     int filtlength,
 		     t_float sign)
 {
-
-  int k,m;
+  int k, m;
   t_float acc;
 
   for (k = 0; k < numcoef; k++)
@@ -328,7 +322,6 @@ static inline void dwtloop(t_float *vector,
       source -= backup;
       source &= mask;
     }
-
 }
 
 static inline void dwtloop16(t_float *vector, 
@@ -342,7 +335,7 @@ static inline void dwtloop16(t_float *vector,
 		     int filtlength, /* ignored, set to 16 */
 		     t_float sign)
 {
-  int k,m;
+  int k;
   t_float acc;
 
   for (k = 0; k < numcoef; k++)
@@ -420,18 +413,11 @@ static inline void dwtloop16(t_float *vector,
     }
 }
 
-static t_int *dwt_perform(t_int *w);
-static t_int *idwt_perform(t_int *w);
-static t_int *dwt16_perform(t_int *w);
-static t_int *idwt16_perform(t_int *w);
-
 void dwt_free(t_dwt *x)
 {
   if (x->x_ctl.c_clutter)   free(x->x_ctl.c_clutter);
   if (x->x_ctl.c_unclutter) free(x->x_ctl.c_unclutter);
 }
-
-//t_class *dwt_class, *idwt_class, *dwt16_class, *idwt16_class;
 
 static void dwt_reset(t_dwt *x)
 {
@@ -449,3 +435,6 @@ static void dwt_reset(t_dwt *x)
     x->x_ctl.c_fakein = -1;
     x->x_ctl.c_fakeval = 0;
 }
+
+#define DWTCOMMON
+#endif

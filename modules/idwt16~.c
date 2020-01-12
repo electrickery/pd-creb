@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dwt-common.c"
+#include "dwt-common.h"
 
 #define MAXORDER 64
 

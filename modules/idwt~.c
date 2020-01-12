@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dwt-common.c"
+#include "dwt-common.h"
 
 #define MAXORDER 64
 
@@ -108,7 +108,6 @@ static void idwt_dsp(t_dwt *x, t_signal **sp)
 static void *idwt_new(t_floatarg permute)
 {
     t_dwt *x = (t_dwt *)pd_new(idwt_class);
-    int i;
 
     outlet_new(&x->x_obj, gensym("signal")); 
 
