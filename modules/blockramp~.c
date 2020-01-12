@@ -1,5 +1,5 @@
 /*
- *   ramp.c  - retriggerable counter for dsp signals 
+ *   blockramp.c  - retriggerable counter for dsp signals 
  *   Copyright (c) 2000-2003 by Tom Schouten
  * 
  *   Restructuring for independent objects and library blob mode by
@@ -25,24 +25,26 @@
 
 #include "ramp-common.h"
 
-t_class *ramp_class;
+t_class *blockramp_class;
 
-void *ramp_new(void)
+void *blockramp_new(void)
 {
-    t_ramp *x = (t_ramp *)pd_new(ramp_class);
+    t_ramp *x = (t_ramp *)pd_new(blockramp_class);
     outlet_new(&x->x_obj, gensym("signal")); 
     x->x_ctl.c_blockscale = 0;
     ramp_bang(x);
+    
+    x->x_ctl.c_blockscale = 1;
     return (void *)x;
 }
 
-void ramp_tilde_setup(void)
+void blockramp_tilde_setup(void)
 {
-  //post("ramp~ v0.1");
-    ramp_class = class_new(gensym("ramp~"), (t_newmethod)ramp_new,
+  //post("blockramp~ v0.1");
+    blockramp_class = class_new(gensym("blockramp~"), (t_newmethod)blockramp_new,
     	(t_method)ramp_free, sizeof(t_ramp), 0, 0);
 
-    class_addmethod(ramp_class, (t_method)ramp_bang, gensym("bang"), 0);
-    class_addmethod(ramp_class, (t_method)ramp_dsp, gensym("dsp"), 0); 
-    class_addfloat(ramp_class, (t_method)ramp_offset); 
+    class_addmethod(blockramp_class, (t_method)ramp_bang, gensym("bang"), 0);
+    class_addmethod(blockramp_class, (t_method)ramp_dsp, gensym("dsp"), 0); 
+    class_addfloat(blockramp_class,  (t_method)ramp_offset); 
 }
