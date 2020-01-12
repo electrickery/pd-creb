@@ -1,7 +1,10 @@
 /*
- *   dwt.c  - code for discrete wavelet transform 
+ *   dwt-common.c  - code for discrete wavelet transform
  *   (symmetric interpolating biorthogonal wavelets using the lifting transform) 
  *   Copyright (c) 2000-2003 by Tom Schouten
+ *   This is the code common to dwt~, idwt~, dwt16~ and idwt16~. This code 
+ *   restructuring (mainly reorganizing methods) is performed by Fred Jan Kraan, 
+ *   2020-01-11
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
