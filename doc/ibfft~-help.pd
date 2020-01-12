@@ -21,11 +21,11 @@ Wilkes for Pd version 0.42.;
 #X text 12 -60 spectrum: (DC \, NY) \, (R1 \, I1) \, ...(RN-1 \, IN-1)
 ;
 #X obj 17 180 tabsend~ \$0-scope;
-#X obj 18 113 creb/bfft~;
-#X obj 158 208 creb/ibfft~;
 #X obj 233 208 creb/fht~;
 #X text 159 186 Also see:;
-#X connect 0 0 8 0;
+#X obj 18 113 creb/ibfft~;
+#X obj 158 208 creb/bfft~;
+#X connect 0 0 10 0;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
-#X connect 8 0 7 0;
+#X connect 10 0 7 0;
