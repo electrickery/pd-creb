@@ -2,6 +2,6 @@
 #X text 9 20 AUTHOR Tom Schouten <tom@zwizwa.be>;
 #X text 9 40 DESCRIPTION This is a collection of pd externals. My bag of tricks.;
 #X text 9 80 LICENSE GNU GPL 2;
-#X text 9 100 VERSION 0.9.3;
+#X text 9 100 VERSION 0.10.0;
 #X text 9 120 REPOSITORY https://github.com/electrickery/pd-creb;
-#X text 9 140 MAINAINER Fred Jan Kraan <fjkraan@xs4all.nl>
+#X text 9 140 MAINAINER Fred Jan Kraan <fjkraan@electrickery.nl>

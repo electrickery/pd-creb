@@ -37,11 +37,8 @@ pre: bootstrap
 ### pdlibbuilder ###############################################################
 ################################################################################
 
-
-# Include Makefile.pdlibbuilder from this directory, or else from externals
-# root directory in pd-extended configuration.
-
-include $(firstword $(wildcard Makefile.pdlibbuilder ../Makefile.pdlibbuilder))
+PDLIBBUILDER_DIR=pd-lib-builder/
+include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
 
 
 ################################################################################
